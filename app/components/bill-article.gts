@@ -7,6 +7,7 @@ interface BillArticleSignature {
     nodes: TextNode[];
     viewMode: string;
     showAnnotations: boolean;
+    showOmissions: boolean;
   };
 }
 
@@ -22,6 +23,7 @@ export default class BillArticle extends Component<BillArticleSignature> {
           @node={{node}}
           @viewMode={{@viewMode}}
           @showAnnotations={{@showAnnotations}}
+          @showOmissions={{@showOmissions}}
         />
       {{/each}}
     </article>

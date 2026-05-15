@@ -11,16 +11,22 @@ interface BillNodeSignature {
     node: TextNode;
     viewMode: string;
     showAnnotations: boolean;
+    showOmissions: boolean;
   };
 }
+
+type SegmentViewModel = RenderSegment & { shouldMark: boolean };
 
 export default class BillNode extends Component<BillNodeSignature> {
   get nodeClassName(): string {
     return `${this.args.node.className} ${this.args.node.issues.length > 0 ? 'has-review-issue' : ''}`;
   }
 
-  shouldMarkSegment(segment: RenderSegment): boolean {
-    return this.args.viewMode !== 'view-current' && segment.marks.length > 0;
+  get renderSegments(): SegmentViewModel[] {
+    return this.args.node.segments.map((segment) => ({
+      ...segment,
+      shouldMark: this.args.showAnnotations && segment.marks.length > 0,
+    }));
   }
 
   <template>
@@ -37,31 +43,42 @@ export default class BillNode extends Component<BillNodeSignature> {
         {{/if}}
 
         {{#if @showAnnotations}}
-          <span>{{@node.sourceLayer}}</span>
-          <span>{{@node.reviewStatus}}</span>
+          <span class="badge badge-ghost">{{@node.sourceLayer}}</span>
+          <span class="badge badge-ghost">{{@node.reviewStatus}}</span>
           {{#if @node.cityDraftStatus}}<span
+              class="badge badge-ghost"
             >{{@node.cityDraftStatus}}</span>{{/if}}
         {{/if}}
       </div>
 
       <p class="node-text">
-        {{#each @node.segments as |segment|}}
-          {{#if (this.shouldMarkSegment segment)}}
-            <mark
-              class={{segment.className}}
-              title={{segment.title}}
-            >{{segment.text}}</mark>
-          {{else}}
-            <span>{{segment.text}}</span>
-          {{/if}}
-        {{/each}}
+        {{#if @showAnnotations}}
+          {{#each this.renderSegments as |segment|}}
+            {{#if segment.shouldMark}}
+              <mark
+                class={{segment.className}}
+                title={{segment.title}}
+              >{{segment.text}}</mark>
+            {{else}}
+              <span>{{segment.text}}</span>
+            {{/if}}
+          {{/each}}
+        {{else}}
+          {{@node.text}}
+        {{/if}}
       </p>
 
       {{#if @showAnnotations}}
         {{#if @node.issues}}
-          <div class="node-issues" aria-label="Issues anchored to this text">
+          <div
+            class="node-issues alert"
+            aria-label="Issues anchored to this text"
+          >
+            <span class="comment-label">Unresolved editor comments</span>
             {{#each @node.issues as |issue|}}
-              <a href="#{{issue.id}}">{{issue.label}}</a>
+              <a class="badge badge-error badge-outline" href="#{{issue.id}}">
+                {{issue.label}}
+              </a>
             {{/each}}
           </div>
         {{/if}}
@@ -70,9 +87,11 @@ export default class BillNode extends Component<BillNodeSignature> {
           <SourceNote @note={{note}} />
         {{/each}}
 
-        {{#each @node.omissions as |omission|}}
-          <OmissionCallout @omission={{omission}} />
-        {{/each}}
+        {{#if @showOmissions}}
+          {{#each @node.omissions as |omission|}}
+            <OmissionCallout @omission={{omission}} />
+          {{/each}}
+        {{/if}}
       {{/if}}
     </section>
   </template>

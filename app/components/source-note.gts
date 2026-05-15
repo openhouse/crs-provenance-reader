@@ -16,16 +16,19 @@ export default class SourceNote extends Component<SourceNoteSignature> {
 
   <template>
     <aside class={{@note.className}}>
-      <p class="callout-label">Source note{{#if @note.topic}}
+      <p class="callout-label">Document comment{{#if @note.topic}}
           ·
           {{@note.topic}}{{/if}}</p>
       <p>{{@note.text}}</p>
       <p class="callout-meta">
-        {{#if @note.sourceLayer}}{{@note.sourceLayer}}{{/if}}
-        {{#if @note.reviewStatus}} · {{@note.reviewStatus}}{{/if}}
+        {{#if @note.sourceLayer}}Participant: {{@note.sourceLayer}}{{/if}}
+        {{#if @note.reviewStatus}} · status: {{@note.reviewStatus}}{{/if}}
         {{#if @note.cityDraftStatus}}
-          · city draft:
+          · city draft cue:
           {{@note.cityDraftStatus}}{{/if}}
+        {{#if this.hasReviewCue}}
+          · suggestion metadata
+        {{/if}}
       </p>
     </aside>
   </template>

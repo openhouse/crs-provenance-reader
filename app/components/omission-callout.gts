@@ -16,15 +16,19 @@ export default class OmissionCallout extends Component<OmissionCalloutSignature>
 
   <template>
     <aside class={{@omission.className}}>
-      <p class="callout-label">Omitted source-layer material</p>
-      <blockquote>{{@omission.omittedText}}</blockquote>
+      <p class="callout-label">Deletion suggestion · omitted prior-source text</p>
+      <blockquote>
+        <del>{{@omission.omittedText}}</del>
+      </blockquote>
       <p class="callout-meta">
         {{#if @omission.omittedFromLayer}}From
           {{@omission.omittedFromLayer}}{{/if}}
-        {{#if @omission.reviewStatus}} · {{@omission.reviewStatus}}{{/if}}
-        {{#if @omission.cityDraftStatus}}
-          · city draft:
-          {{@omission.cityDraftStatus}}{{/if}}
+        {{#if @omission.omittedInLayer}}
+          · omitted in
+          {{@omission.omittedInLayer}}{{/if}}
+        {{#if this.hasReviewCue}}
+          · suggestion unresolved
+        {{/if}}
       </p>
       {{#if @omission.note}}
         <p>{{@omission.note}}</p>

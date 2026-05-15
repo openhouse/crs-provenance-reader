@@ -1,4 +1,24 @@
+@import "tailwindcss";
+
+@plugin "daisyui";
+
 :root {
+  --actor-intro93: #60a5fa;
+  --actor-frnyc-counsel: #a78bfa;
+  --actor-albany-current: #fb923c;
+  --actor-mixed: #34d399;
+  --actor-city-draft: #f472b6;
+  --participant-bg: color-mix(
+    in srgb,
+    var(--actor-color, #64748b) 18%,
+    transparent
+  );
+  --participant-fg: color-mix(
+    in srgb,
+    var(--actor-color, #64748b) 72%,
+    #172033
+  );
+  --participant-line: var(--actor-color, #64748b);
   color: #172033;
   background: #f6f2eb;
   font-family:
@@ -41,12 +61,14 @@ a {
   box-shadow: 0 18px 50px rgb(45 35 20 / 8%);
 }
 
-.reader-header {
+.reader-header .hero-content {
+  max-width: none;
   padding: clamp(1.25rem, 3vw, 3rem);
 }
 
 .eyebrow,
-.callout-label {
+.callout-label,
+.comment-label {
   margin: 0 0 0.35rem;
   color: #71624e;
   font-size: 0.76rem;
@@ -102,14 +124,16 @@ h1 {
 }
 
 .legal-caveat {
-  padding: 1rem;
-  border: 1px solid #dbc48a;
-  border-radius: 14px;
-  background: #fff7da;
+  color: #504020;
+  font-size: 0.92rem;
 }
 
 .source-legend {
   margin: 1.25rem 0;
+}
+
+.source-legend .card-body,
+.issue-panel .card-body {
   padding: 1.25rem;
 }
 
@@ -123,26 +147,7 @@ h1 {
 }
 
 .view-mode-buttons {
-  display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.view-mode-button {
-  padding: 0.65rem 0.85rem;
-  border: 1px solid #b9ad9e;
-  border-radius: 999px;
-  background: #fff;
-  color: #263247;
-  cursor: pointer;
-  font: inherit;
-  font-weight: 700;
-}
-
-.view-mode-button.is-active {
-  border-color: #1d4d7a;
-  background: #1d4d7a;
-  color: white;
 }
 
 .legend-grid {
@@ -154,22 +159,19 @@ h1 {
 .source-card {
   padding: 1rem;
   border: 1px solid #e3ddd4;
-  border-left: 6px solid #718096;
+  border-left: 6px solid var(--participant-line);
   border-radius: 14px;
   background: #fff;
 }
 
-.source-kind-albany-current,
-.source-kind-albany-current-companion {
-  border-left-color: #9b5c15;
+.source-card h3 {
+  font-size: 1rem;
 }
 
-.source-kind-intro93 {
-  border-left-color: #425f9b;
-}
-
-.source-kind-frnyc-redline {
-  border-left-color: #2f855a;
+.source-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
 }
 
 .source-meta,
@@ -209,7 +211,6 @@ h1 {
   position: sticky;
   top: 1rem;
   max-height: calc(100vh - 2rem);
-  padding: 1rem;
   overflow: auto;
 }
 
@@ -230,24 +231,10 @@ h1 {
   border-left: 6px solid #b42318;
 }
 
-.city-draft-cue-fix,
-.city-draft-status-fix {
-  background-image: linear-gradient(90deg, rgb(180 35 24 / 12%), transparent);
-}
-
-.city-draft-cue-restore,
-.city-draft-status-consider-restore,
-.city-draft-status-restore {
-  background-image: linear-gradient(90deg, rgb(88 80 236 / 12%), transparent);
-}
-
 .issue-anchor,
 .node-issues a {
-  display: inline-block;
+  display: inline-flex;
   margin: 0.15rem 0.25rem 0.15rem 0;
-  padding: 0.22rem 0.5rem;
-  border-radius: 999px;
-  background: #eaf2fb;
   text-decoration: none;
 }
 
@@ -278,12 +265,6 @@ h1 {
   margin-bottom: 0.35rem;
 }
 
-.node-meta span {
-  padding: 0.1rem 0.42rem;
-  border-radius: 999px;
-  background: #f0ede7;
-}
-
 .node-text {
   margin: 0;
   color: #172033;
@@ -291,37 +272,150 @@ h1 {
   font-size: clamp(1.04rem, 1.6vw, 1.18rem);
 }
 
-mark.text-segment {
-  padding: 0.05rem 0.08rem;
+mark.text-segment,
+.text-segment {
+  padding: 0.02rem 0.08rem;
   border-radius: 0.18rem;
   background: transparent;
+  box-decoration-break: clone;
   color: inherit;
+  -webkit-box-decoration-break: clone;
 }
 
-.source-layer-albany-current,
-.source-action-added {
-  background-color: rgb(180 110 34 / 16%);
+.participant-intro93,
+.source-layer-intro93,
+.source-intro93 {
+  --actor-color: var(--actor-intro93);
+  --participant-bg: color-mix(in srgb, var(--actor-intro93) 20%, transparent);
+  --participant-fg: color-mix(in srgb, var(--actor-intro93) 76%, #172033);
+  --participant-line: var(--actor-intro93);
 }
 
+.participant-frnyc-counsel,
 .source-layer-frnyc-redline,
-.review-status-counsel-reviewed {
-  background-color: rgb(47 133 90 / 18%);
+.source-frnyc-reviewed,
+.source-kind-frnyc-counsel-redline {
+  --actor-color: var(--actor-frnyc-counsel);
+  --participant-bg: color-mix(
+    in srgb,
+    var(--actor-frnyc-counsel) 20%,
+    transparent
+  );
+  --participant-fg: color-mix(in srgb, var(--actor-frnyc-counsel) 76%, #172033);
+  --participant-line: var(--actor-frnyc-counsel);
 }
 
-.source-layer-intro93 {
-  background-color: rgb(66 95 155 / 16%);
+.participant-albany-current,
+.source-layer-albany-current,
+.source-albany-current,
+.source-kind-albany-current,
+.source-kind-albany-current-companion {
+  --actor-color: var(--actor-albany-current);
+  --participant-bg: color-mix(
+    in srgb,
+    var(--actor-albany-current) 22%,
+    transparent
+  );
+  --participant-fg: color-mix(
+    in srgb,
+    var(--actor-albany-current) 78%,
+    #172033
+  );
+  --participant-line: var(--actor-albany-current);
 }
 
+.participant-mixed,
+.source-layer-mixed,
+.source-mixed {
+  --actor-color: var(--actor-mixed);
+  --participant-bg: color-mix(in srgb, var(--actor-mixed) 16%, transparent);
+  --participant-fg: color-mix(in srgb, var(--actor-mixed) 72%, #172033);
+  --participant-line: var(--actor-mixed);
+}
+
+.participant-city-draft,
+.source-city-draft {
+  --actor-color: var(--actor-city-draft);
+  --participant-bg: color-mix(
+    in srgb,
+    var(--actor-city-draft) 16%,
+    transparent
+  );
+  --participant-fg: color-mix(in srgb, var(--actor-city-draft) 72%, #172033);
+  --participant-line: var(--actor-city-draft);
+}
+
+.change-added,
+.action-added,
+.source-action-added {
+  background: var(--participant-bg);
+  box-shadow: inset 0 -0.18em 0 var(--participant-line);
+}
+
+.change-retained,
+.action-retained,
+.source-action-retained,
+.review-status-counsel-reviewed,
+.review-status-counsel-reviewed-modified {
+  background: color-mix(in srgb, var(--participant-line) 12%, transparent);
+  border-bottom: 0.11em solid
+    color-mix(in srgb, var(--participant-line) 68%, transparent);
+}
+
+.change-modified,
+.action-modified,
+.action-substituted,
+.source-action-modified,
+.source-action-substituted {
+  background: color-mix(in srgb, var(--participant-line) 18%, transparent);
+  border-bottom: 0.16em solid var(--participant-line);
+}
+
+.change-deleted,
+.action-removed,
+.action-omitted,
+.source-action-removed,
+.omission-callout del {
+  color: var(--participant-fg);
+  text-decoration-color: var(--participant-line);
+  text-decoration-line: line-through;
+  text-decoration-thickness: 0.14em;
+}
+
+.change-review-needed,
+.change-drafting-error,
+.review-needed,
+.drafting-error,
 .review-status-review-needed,
-.city-draft-status-needs-counsel,
-.city-draft-status-review-before-porting {
-  background-color: rgb(181 118 20 / 20%);
+.review-status-drafting-error,
+.flag-review-needed,
+.flag-drafting-error {
+  outline: 2px solid var(--participant-line, #b7791f);
+  outline-offset: 2px;
 }
 
+.change-drafting-error,
+.drafting-error,
 .review-status-drafting-error,
 .flag-drafting-error {
-  outline: 2px solid #b42318;
-  background-color: rgb(244 63 94 / 20%);
+  --participant-line: #b42318;
+  background-color: rgb(244 63 94 / 16%);
+}
+
+.city-draft-fix,
+.city-draft-restore,
+.city-draft-consider-restore,
+.city-draft-review-before-porting,
+.city-draft-needs-counsel,
+.city-draft-cue-fix,
+.city-draft-status-fix,
+.city-draft-cue-restore,
+.city-draft-status-consider-restore,
+.city-draft-status-restore,
+.city-draft-status-review-before-porting,
+.city-draft-status-needs-counsel {
+  box-shadow: inset 0 -0.18em 0
+    color-mix(in srgb, var(--actor-city-draft) 72%, transparent);
 }
 
 .source-note,
@@ -333,22 +427,25 @@ mark.text-segment {
 }
 
 .source-note {
-  border: 1px solid #bfd7c9;
-  background: #f0fbf5;
+  border: 1px solid
+    color-mix(in srgb, var(--participant-line, #bfd7c9) 38%, white);
+  background: color-mix(in srgb, var(--participant-line, #bfd7c9) 11%, white);
 }
 
 .omission-callout {
-  border: 1px dashed #b6a4db;
-  background: #f6f2ff;
+  border: 1px dashed var(--participant-line);
+  background: color-mix(in srgb, var(--participant-line) 10%, white);
 }
 
 .omission-callout blockquote {
   margin: 0.35rem 0;
   padding-left: 0.85rem;
-  border-left: 4px solid #8b76c7;
+  border-left: 4px solid var(--participant-line);
+  font-family: Georgia, "Times New Roman", serif;
 }
 
 .node-issues {
+  display: block;
   border: 1px solid #f0c5bd;
   background: #fff3f0;
 }
@@ -362,16 +459,26 @@ mark.text-segment {
   padding-left: 0;
 }
 
+.view-current .node-meta span,
+.view-current .source-note,
+.view-current .omission-callout,
+.view-current .node-issues {
+  display: none;
+}
+
 .view-current mark.text-segment,
-.view-current .source-layer-albany-current,
-.view-current .source-action-added,
-.view-current .source-layer-frnyc-redline,
-.view-current .review-status-counsel-reviewed,
-.view-current .review-status-review-needed,
-.view-current .review-status-drafting-error,
-.view-current .flag-drafting-error {
+.view-current .text-segment,
+.view-current [class*="source-layer-"],
+.view-current [class*="source-action-"],
+.view-current [class*="review-status-"],
+.view-current [class*="city-draft-status-"],
+.view-current [class*="flag-"] {
+  border: 0;
   outline: none;
   background: transparent;
+  box-shadow: none;
+  color: inherit;
+  text-decoration: none;
 }
 
 .view-albany-new .source-action-added,
@@ -381,15 +488,37 @@ mark.text-segment {
 }
 
 .view-frnyc-review .review-status-counsel-reviewed,
+.view-frnyc-review .review-status-counsel-reviewed-modified,
 .view-frnyc-review .source-layer-frnyc-redline {
-  outline: 2px solid #2f855a;
+  outline: 2px solid var(--actor-frnyc-counsel);
+}
+
+.view-legal-review .review-status-review-needed,
+.view-legal-review .review-status-drafting-error,
+.view-legal-review .flag-review-needed,
+.view-legal-review .flag-drafting-error,
+.view-legal-review .flag-takings {
+  outline: 2px solid #b42318;
 }
 
 .view-city-draft .city-draft-status-fix,
 .view-city-draft .city-draft-status-consider-restore,
 .view-city-draft .city-draft-status-review-before-porting,
 .view-city-draft .city-draft-status-needs-counsel {
-  outline: 2px solid #5a54d6;
+  outline: 2px solid var(--actor-city-draft);
+}
+
+.focus-chain-definition .bill-node:not(.flag-chain-definition) {
+  opacity: 0.42;
+}
+
+.focus-chain-definition .flag-chain-definition {
+  outline: 3px solid #b42318;
+  outline-offset: 4px;
+}
+
+.hide-omissions .omission-callout {
+  display: none;
 }
 
 @media (width <= 960px) {
