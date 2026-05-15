@@ -146,6 +146,88 @@ function topicClasses(topics: string[]): string[] {
   return topics.map((topic) => `topic-${topic}`);
 }
 
+function participantClasses(
+  sourceLayer: string | null | undefined,
+  sourceKind?: string | null,
+): string[] {
+  const sourceIdentity = sourceLayer ?? sourceKind;
+
+  switch (sourceIdentity) {
+    case 'intro93':
+      return ['participant-intro93', 'source-intro93'];
+    case 'frnyc-redline':
+    case 'frnyc-counsel-redline':
+      return ['participant-frnyc-counsel', 'source-frnyc-reviewed'];
+    case 'albany-current':
+    case 'albany-current-companion':
+      return ['participant-albany-current', 'source-albany-current'];
+    case 'mixed':
+      return ['participant-mixed', 'source-mixed'];
+    case 'city-draft':
+      return ['participant-city-draft', 'source-city-draft'];
+    default:
+      return [];
+  }
+}
+
+function changeClasses(attributes: {
+  sourceAction?: string | null;
+  reviewStatus?: string | null;
+  cityDraftStatus?: string | null;
+  cityDraftCue?: string | null;
+  topics?: string[];
+}): string[] {
+  const classes: string[] = [];
+  const topics = attributes.topics ?? [];
+
+  switch (attributes.sourceAction) {
+    case 'added':
+      classes.push('change-added', 'action-added');
+      break;
+    case 'removed':
+      classes.push('change-deleted', 'action-removed');
+      break;
+    case 'omitted':
+      classes.push('change-deleted', 'action-omitted', 'suggestion-deletion');
+      break;
+    case 'modified':
+    case 'substituted':
+      classes.push('change-modified', `action-${attributes.sourceAction}`);
+      break;
+    case 'retained':
+      classes.push('change-retained', 'action-retained');
+      break;
+  }
+
+  if (
+    attributes.reviewStatus === 'review-needed' ||
+    topics.includes('review-needed')
+  ) {
+    classes.push('change-review-needed', 'review-needed');
+  }
+
+  if (
+    attributes.reviewStatus === 'drafting-error' ||
+    topics.includes('drafting-error')
+  ) {
+    classes.push('change-drafting-error', 'drafting-error');
+  }
+
+  if (attributes.reviewStatus?.startsWith('counsel-reviewed')) {
+    classes.push('change-retained', 'accepted-suggestion');
+  }
+
+  if (attributes.cityDraftStatus) {
+    classes.push(`city-draft-${attributes.cityDraftStatus}`);
+  }
+
+  if (attributes.cityDraftCue) {
+    classes.push(`city-draft-${attributes.cityDraftCue}`);
+  }
+
+  return classes;
+}
+
 function compactClasses(
   classes: (string | false | null | undefined)[],
 ): string {
@@ -163,6 +245,7 @@ export function deriveSemanticClasses(attributes: {
   topics?: string[];
   severity?: string;
   cityDraftCue?: string;
+  sourceKind?: string;
 }): string {
   const topics = attributes.topics ?? [];
 
@@ -170,6 +253,8 @@ export function deriveSemanticClasses(attributes: {
     attributes.kind ? `kind-${attributes.kind}` : undefined,
     ...semanticClassPrefix('source-layer', attributes.sourceLayer),
     ...semanticClassPrefix('source-action', attributes.sourceAction),
+    ...participantClasses(attributes.sourceLayer, attributes.sourceKind),
+    ...changeClasses(attributes),
     ...semanticClassPrefix('review-status', attributes.reviewStatus),
     ...semanticClassPrefix('city-draft-status', attributes.cityDraftStatus),
     ...semanticClassPrefix('issue-severity', attributes.severity),
@@ -204,7 +289,13 @@ function hydrateSource(
     reviewAuthority: asOptionalString(attr(resource, 'reviewAuthority')),
     url: asOptionalString(attr(resource, 'url')),
     notes: asOptionalString(attr(resource, 'notes')),
-    className: compactClasses(['source-card', `source-kind-${sourceKind}`]),
+    className: compactClasses([
+      'source-card',
+      'card',
+      'bg-base-100',
+      `source-kind-${sourceKind}`,
+      ...participantClasses(undefined, sourceKind),
+    ]),
   };
 }
 
@@ -286,6 +377,7 @@ function hydrateOmission(
       'omission-callout',
       deriveSemanticClasses({
         sourceLayer: omittedFromLayer,
+        sourceAction: 'omitted',
         reviewStatus,
         cityDraftStatus,
         topics,
@@ -495,6 +587,42 @@ function hydrateNode(
   return node;
 }
 
+const ADDITIONAL_VIEW_MODES: ViewMode[] = [
+  {
+    id: 'view-legal-review',
+    order: 6,
+    label: 'Legal review',
+    description:
+      'Emphasize unresolved legal-review and drafting-error comments.',
+    bodyClass: 'view-legal-review',
+  },
+  {
+    id: 'focus-chain-definition',
+    order: 7,
+    label: 'Focus: chain definition',
+    description:
+      'Focus the reader on the common-landlord chain-business drafting issue.',
+    bodyClass: 'focus-chain-definition',
+  },
+  {
+    id: 'hide-omissions',
+    order: 8,
+    label: 'Hide omissions',
+    description:
+      'Keep provenance highlights visible while hiding omission callouts.',
+    bodyClass: 'hide-omissions',
+  },
+];
+
+function appendAdditionalViewModes(viewModes: ViewMode[]): ViewMode[] {
+  const existingIds = new Set(viewModes.map((mode) => mode.id));
+
+  return [
+    ...viewModes,
+    ...ADDITIONAL_VIEW_MODES.filter((mode) => !existingIds.has(mode.id)),
+  ].sort((left, right) => left.order - right.order);
+}
+
 export function hydrateProvenanceDocument(
   payload: JsonApiDocument,
 ): HydratedDocument {
@@ -506,9 +634,11 @@ export function hydrateProvenanceDocument(
   const sources = relatedResources(index, root, 'sources')
     .map((resource) => hydrateSource(resource))
     .filter((source): source is SourceDocument => Boolean(source));
-  const viewModes = relatedResources(index, root, 'viewModes')
-    .map((resource) => hydrateViewMode(resource))
-    .sort((left, right) => left.order - right.order);
+  const viewModes = appendAdditionalViewModes(
+    relatedResources(index, root, 'viewModes')
+      .map((resource) => hydrateViewMode(resource))
+      .sort((left, right) => left.order - right.order),
+  );
   const highPriorityIssues = relatedResources(
     index,
     root,

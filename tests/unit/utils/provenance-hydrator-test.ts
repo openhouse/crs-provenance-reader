@@ -180,7 +180,7 @@ module('Unit | Utility | provenance hydrator', function () {
       'Commercial Rent Stabilization — Albany Bill Source Map',
     );
     assert.strictEqual(document.sources.length, 1);
-    assert.strictEqual(document.viewModes.length, 2);
+    assert.strictEqual(document.viewModes.length, 5);
     assert.strictEqual(document.highPriorityIssues.length, 1);
     assert.ok(node, 'node hydrated');
     assert.strictEqual(node.id, 'node-20-sec-22-1502');
@@ -251,5 +251,14 @@ module('Unit | Utility | provenance hydrator', function () {
       landlordSegment?.className.includes('review-status-drafting-error'),
     );
     assert.true(landlordSegment?.className.includes('flag-drafting-error'));
+    assert.true(
+      landlordSegment?.className.includes('participant-albany-current'),
+    );
+    assert.true(landlordSegment?.className.includes('change-modified'));
+
+    const omission = node?.omissions[0];
+
+    assert.true(omission?.className.includes('suggestion-deletion'));
+    assert.true(omission?.className.includes('participant-frnyc-counsel'));
   });
 });

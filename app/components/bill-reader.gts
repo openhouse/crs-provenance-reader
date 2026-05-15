@@ -46,6 +46,10 @@ export default class BillReader extends Component<BillReaderSignature> {
     return this.selectedViewMode !== 'view-current';
   }
 
+  get showOmissions(): boolean {
+    return this.showAnnotations && this.selectedViewMode !== 'hide-omissions';
+  }
+
   @action
   selectViewMode(viewMode: string): void {
     this.selectedViewMode = viewMode;
@@ -62,54 +66,59 @@ export default class BillReader extends Component<BillReaderSignature> {
       class="reader-shell {{this.activeViewModeClass}}"
       data-view-mode={{this.selectedViewMode}}
     >
-      <header class="reader-header">
-        <p class="eyebrow">Commercial Rent Stabilization provenance reader</p>
-        <h1>{{@document.title}}</h1>
+      <header class="reader-header hero bg-base-100 shadow-sm">
+        <div class="hero-content block">
+          <p class="eyebrow">Collaborative legislative text editor</p>
+          <h1>{{@document.title}}</h1>
 
-        {{#if @document.description}}
-          <p class="lede">{{@document.description}}</p>
-        {{/if}}
+          {{#if @document.description}}
+            <p class="lede">{{@document.description}}</p>
+          {{/if}}
 
-        <dl class="document-meta" aria-label="Bill metadata">
-          {{#if @document.billNumber}}
+          <dl class="document-meta" aria-label="Bill metadata">
+            {{#if @document.billNumber}}
+              <div>
+                <dt>Bill</dt>
+                <dd>{{@document.billNumber}}</dd>
+              </div>
+            {{/if}}
+            {{#if @document.session}}
+              <div>
+                <dt>Session</dt>
+                <dd>{{@document.session}}</dd>
+              </div>
+            {{/if}}
+            {{#if @document.status}}
+              <div>
+                <dt>Status</dt>
+                <dd>{{@document.status}}</dd>
+              </div>
+            {{/if}}
             <div>
-              <dt>Bill</dt>
-              <dd>{{@document.billNumber}}</dd>
+              <dt>Payload</dt>
+              <dd>{{@document.smokeCheck.textNodes}}
+                nodes ·
+                {{@document.smokeCheck.textMarks}}
+                marks ·
+                {{@document.smokeCheck.issues}}
+                issues</dd>
             </div>
-          {{/if}}
-          {{#if @document.session}}
-            <div>
-              <dt>Session</dt>
-              <dd>{{@document.session}}</dd>
-            </div>
-          {{/if}}
-          {{#if @document.status}}
-            <div>
-              <dt>Status</dt>
-              <dd>{{@document.status}}</dd>
-            </div>
-          {{/if}}
-          <div>
-            <dt>Payload</dt>
-            <dd>{{@document.smokeCheck.textNodes}}
-              nodes ·
-              {{@document.smokeCheck.textMarks}}
-              marks ·
-              {{@document.smokeCheck.issues}}
-              issues</dd>
-          </div>
-        </dl>
+          </dl>
 
-        <aside class="legal-caveat" aria-label="Legal review caveat">
-          <strong>Review caveat:</strong>
-          This is a legislative-reading and provenance interface, not legal
-          advice.
-          <code>counsel-reviewed</code>
-          means substantially carried through the Fair Rent NYC 2022
-          counsel-redline lineage, not an independent guarantee of legal
-          sufficiency. Review flags are metadata for counsel/policy review, not
-          final legal conclusions.
-        </aside>
+          <aside
+            class="legal-caveat alert alert-warning"
+            aria-label="Legal review caveat"
+          >
+            <strong>Review caveat:</strong>
+            This is a legislative-reading and provenance interface, not legal
+            advice.
+            <code>counsel-reviewed</code>
+            means substantially carried through the Fair Rent NYC 2022
+            counsel-redline lineage, not an independent guarantee of legal
+            sufficiency. Review flags are metadata for counsel/policy review,
+            not final legal conclusions.
+          </aside>
+        </div>
       </header>
 
       <SourceLegend
@@ -128,6 +137,7 @@ export default class BillReader extends Component<BillReaderSignature> {
           @nodes={{@document.nodes}}
           @viewMode={{this.selectedViewMode}}
           @showAnnotations={{this.showAnnotations}}
+          @showOmissions={{this.showOmissions}}
         />
       </main>
     </div>
