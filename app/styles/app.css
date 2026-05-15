@@ -1,1 +1,408 @@
-/* Ember supports plain CSS out of the box. More info: https://cli.emberjs.com/release/advanced-use/stylesheets/ */
+:root {
+  color: #172033;
+  background: #f6f2eb;
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  line-height: 1.55;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #f6f2eb;
+}
+
+a {
+  color: #285c8f;
+}
+
+.reader-shell {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.reader-header,
+.source-legend,
+.issue-panel,
+.bill-article {
+  border: 1px solid #ded6c9;
+  border-radius: 20px;
+  background: rgb(255 252 247 / 94%);
+  box-shadow: 0 18px 50px rgb(45 35 20 / 8%);
+}
+
+.reader-header {
+  padding: clamp(1.25rem, 3vw, 3rem);
+}
+
+.eyebrow,
+.callout-label {
+  margin: 0 0 0.35rem;
+  color: #71624e;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+h1,
+h2,
+h3 {
+  margin-block: 0 0.65rem;
+  line-height: 1.15;
+}
+
+h1 {
+  max-width: 980px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2.2rem, 5vw, 4.8rem);
+  letter-spacing: -0.045em;
+}
+
+.lede {
+  max-width: 850px;
+  color: #4b5566;
+  font-size: 1.18rem;
+}
+
+.document-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.85rem;
+  margin: 1.5rem 0;
+}
+
+.document-meta div {
+  padding: 0.85rem;
+  border-radius: 14px;
+  background: #f4efe6;
+}
+
+.document-meta dt {
+  color: #756753;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.document-meta dd {
+  margin: 0.2rem 0 0;
+  overflow-wrap: anywhere;
+  font-weight: 700;
+}
+
+.legal-caveat {
+  padding: 1rem;
+  border: 1px solid #dbc48a;
+  border-radius: 14px;
+  background: #fff7da;
+}
+
+.source-legend {
+  margin: 1.25rem 0;
+  padding: 1.25rem;
+}
+
+.legend-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.view-mode-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.view-mode-button {
+  padding: 0.65rem 0.85rem;
+  border: 1px solid #b9ad9e;
+  border-radius: 999px;
+  background: #fff;
+  color: #263247;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+}
+
+.view-mode-button.is-active {
+  border-color: #1d4d7a;
+  background: #1d4d7a;
+  color: white;
+}
+
+.legend-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 0.85rem;
+}
+
+.source-card {
+  padding: 1rem;
+  border: 1px solid #e3ddd4;
+  border-left: 6px solid #718096;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.source-kind-albany-current,
+.source-kind-albany-current-companion {
+  border-left-color: #9b5c15;
+}
+
+.source-kind-intro93 {
+  border-left-color: #425f9b;
+}
+
+.source-kind-frnyc-redline {
+  border-left-color: #2f855a;
+}
+
+.source-meta,
+.callout-meta,
+.issue-detail,
+.node-meta {
+  color: #657081;
+  font-size: 0.88rem;
+}
+
+.visual-vocabulary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  margin-top: 1rem;
+  color: #4b5566;
+  font-size: 0.92rem;
+}
+
+.swatch {
+  display: inline-block;
+  width: 0.9rem;
+  height: 0.9rem;
+  margin-right: 0.3rem;
+  border-radius: 4px;
+  vertical-align: -0.12rem;
+}
+
+.reader-layout {
+  display: grid;
+  grid-template-columns: minmax(260px, 360px) minmax(0, 1fr);
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.issue-panel {
+  position: sticky;
+  top: 1rem;
+  max-height: calc(100vh - 2rem);
+  padding: 1rem;
+  overflow: auto;
+}
+
+.issue-panel ol {
+  display: grid;
+  gap: 1rem;
+  padding-left: 1.1rem;
+}
+
+.review-issue {
+  padding: 0.85rem;
+  border: 1px solid #e4ddd2;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.issue-severity-high {
+  border-left: 6px solid #b42318;
+}
+
+.city-draft-cue-fix,
+.city-draft-status-fix {
+  background-image: linear-gradient(90deg, rgb(180 35 24 / 12%), transparent);
+}
+
+.city-draft-cue-restore,
+.city-draft-status-consider-restore,
+.city-draft-status-restore {
+  background-image: linear-gradient(90deg, rgb(88 80 236 / 12%), transparent);
+}
+
+.issue-anchor,
+.node-issues a {
+  display: inline-block;
+  margin: 0.15rem 0.25rem 0.15rem 0;
+  padding: 0.22rem 0.5rem;
+  border-radius: 999px;
+  background: #eaf2fb;
+  text-decoration: none;
+}
+
+.bill-article {
+  padding: clamp(1rem, 3vw, 2.25rem);
+}
+
+.bill-node {
+  padding: 1rem 0;
+  border-top: 1px solid #ebe4dc;
+  scroll-margin-top: 1rem;
+}
+
+.bill-node:first-child {
+  border-top: 0;
+}
+
+.bill-node.has-review-issue {
+  border-left: 5px solid #b42318;
+  padding-left: 1rem;
+}
+
+.node-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 0.65rem;
+  align-items: center;
+  margin-bottom: 0.35rem;
+}
+
+.node-meta span {
+  padding: 0.1rem 0.42rem;
+  border-radius: 999px;
+  background: #f0ede7;
+}
+
+.node-text {
+  margin: 0;
+  color: #172033;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.04rem, 1.6vw, 1.18rem);
+}
+
+mark.text-segment {
+  padding: 0.05rem 0.08rem;
+  border-radius: 0.18rem;
+  background: transparent;
+  color: inherit;
+}
+
+.source-layer-albany-current,
+.source-action-added {
+  background-color: rgb(180 110 34 / 16%);
+}
+
+.source-layer-frnyc-redline,
+.review-status-counsel-reviewed {
+  background-color: rgb(47 133 90 / 18%);
+}
+
+.source-layer-intro93 {
+  background-color: rgb(66 95 155 / 16%);
+}
+
+.review-status-review-needed,
+.city-draft-status-needs-counsel,
+.city-draft-status-review-before-porting {
+  background-color: rgb(181 118 20 / 20%);
+}
+
+.review-status-drafting-error,
+.flag-drafting-error {
+  outline: 2px solid #b42318;
+  background-color: rgb(244 63 94 / 20%);
+}
+
+.source-note,
+.omission-callout,
+.node-issues {
+  margin-top: 0.75rem;
+  padding: 0.85rem 1rem;
+  border-radius: 14px;
+}
+
+.source-note {
+  border: 1px solid #bfd7c9;
+  background: #f0fbf5;
+}
+
+.omission-callout {
+  border: 1px dashed #b6a4db;
+  background: #f6f2ff;
+}
+
+.omission-callout blockquote {
+  margin: 0.35rem 0;
+  padding-left: 0.85rem;
+  border-left: 4px solid #8b76c7;
+}
+
+.node-issues {
+  border: 1px solid #f0c5bd;
+  background: #fff3f0;
+}
+
+.view-current .reader-layout {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.view-current .bill-node {
+  border-left: 0;
+  padding-left: 0;
+}
+
+.view-current mark.text-segment,
+.view-current .source-layer-albany-current,
+.view-current .source-action-added,
+.view-current .source-layer-frnyc-redline,
+.view-current .review-status-counsel-reviewed,
+.view-current .review-status-review-needed,
+.view-current .review-status-drafting-error,
+.view-current .flag-drafting-error {
+  outline: none;
+  background: transparent;
+}
+
+.view-albany-new .source-action-added,
+.view-albany-new .review-status-review-needed,
+.view-albany-new .city-draft-status-needs-counsel {
+  outline: 2px solid #b7791f;
+}
+
+.view-frnyc-review .review-status-counsel-reviewed,
+.view-frnyc-review .source-layer-frnyc-redline {
+  outline: 2px solid #2f855a;
+}
+
+.view-city-draft .city-draft-status-fix,
+.view-city-draft .city-draft-status-consider-restore,
+.view-city-draft .city-draft-status-review-before-porting,
+.view-city-draft .city-draft-status-needs-counsel {
+  outline: 2px solid #5a54d6;
+}
+
+@media (width <= 960px) {
+  .reader-shell {
+    padding: 1rem;
+  }
+
+  .reader-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .issue-panel {
+    position: static;
+    max-height: none;
+  }
+}

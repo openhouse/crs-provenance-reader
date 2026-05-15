@@ -1,12 +1,9 @@
 import { pageTitle } from 'ember-page-title';
-import { WelcomePage } from 'ember-welcome-page';
+import BillReader from 'crs-provenance-reader/components/bill-reader';
 
 <template>
-  {{pageTitle "CrsProvenanceReader"}}
-
-  {{outlet}}
-
-  {{! The following component displays Ember's default welcome message. }}
-  <WelcomePage @extension="gts" />
-  {{! Feel free to remove this! }}
+  {{! @glint-ignore: Ember provides the application route model to its template at runtime. }}
+  {{pageTitle @model.title}}
+  {{! @glint-ignore: Ember provides the application route model to its template at runtime. }}
+  <BillReader @document={{@model}} />
 </template>
