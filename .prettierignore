@@ -11,3 +11,6 @@
 /pnpm-lock.yaml
 ember-cli-update.json
 *.html
+
+# Large static reference payloads are maintained as source artifacts.
+/public/api/alternatives/*.json
